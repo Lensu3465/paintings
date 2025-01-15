@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Натюрморт - Продажа картин</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 1rem 0;
+        }
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        nav ul {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            justify-content: space-between;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .hero {
+            text-align: center;
+            padding: 5rem 1rem;
+            background-color: #f0f0f0;
+        }
+        .hero h1 {
+            margin: 0;
+            font-size: 3rem;
+            color: #4CAF50;
+        }
+        .buttons {
+            margin-top: 2rem;
+        }
+        .buttons a {
+            text-decoration: none;
+            color: white;
+            background-color: #4CAF50;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            margin: 0 0.5rem;
+            display: inline-block;
+        }
+        .profile {
+            display: none;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: white;
+            padding: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 300px;
+        }
+        .profile h2 {
+            margin-top: 0;
+        }
+        .profile .status {
+            margin-bottom: 1rem;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            text-align: center;
+            width: 90%;
+            max-width: 400px;
+        }
+        .modal-content h2 {
+            margin: 0 0 1rem;
+        }
+        .modal-content form {
+            display: flex;
+            flex-direction: column;
+        }
+        .modal-content input {
+            margin-bottom: 1rem;
+            padding: 0.5rem;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .modal-content button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 0.5rem;
+            border-radius: 5px;
+        }
+        .close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Натюрморт</h1>
+            <nav>
+                <ul>
+                    <li><a href="#gallery">Галерея</a></li>
+                    <li><a href="#about">О нас</a></li>
+                    <li><a href="#unique">Эксклюзивная функция</a></li>
+                    <li><a href="#" id="profileLink" style="display: none;">Профиль</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="hero">
+        <h1>Добро пожаловать в Натюрморт</h1>
+        <div class="buttons">
+            <a href="#" id="loginBtn">Вход</a>
+            <a href="#" id="registerBtn">Регистрация</a>
+        </div>
+    </div>
+
+    <main>
+        <section id="gallery" class="gallery">
+            <div class="container">
+                <h2>Наши картины</h2>
+                <div class="art-grid">
+                    <!-- Картины будут добавляться динамически -->
+                </div>
+            </div>
+        </section>
+
+        <section id="about" class="about">
+            <div class="container">
+                <h2>О нас</h2>
+                <p>"Натюрморт" — это современная галерея, где вы найдете уникальные картины для вашего интерьера. Мы предлагаем лучшие произведения искусства от талантливых художников.</p>
+            </div>
+        </section>
+
+        <section id="unique" class="unique-section">
+            <div class="container">
+                <h2>Персонализированная подборка</h2>
+                <p>Используйте нашу уникальную функцию для выбора картины, которая идеально подойдет вашему интерьеру. Просто загрузите фотографию вашей комнаты, и наш AI-помощник подберет подходящие картины из нашей коллекции.</p>
+                <input type="file" id="uploadPhoto" accept="image/*">
+            </div>
+        </section>
+
+        <div class="profile" id="profile">
+            <h2>Профиль пользователя</h2>
+            <p class="status">Статус: <span id="userStatus">Пользователь</span></p>
+            <p>Картин добавлено: <span id="uploadedCount">0</span></p>
+            <input type="text" id="adminCode" placeholder="Введите код для админа">
+            <button id="adminButton">Подтвердить код</button>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Натюрморт. Все права защищены.</p>
+        </div>
+    </footer>
+
+    <div class="modal" id="loginModal">
+        <div class="modal-content">
+            <span class="close" id="closeLogin">&times;</span>
+            <h2>Вход</h2>
+            <form id="loginForm">
+                <input type="text" id="loginUsername" placeholder="Логин" required>
+                <input type="password" id="loginPassword" placeholder="Пароль" required>
+                <button type="submit">Войти</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal" id="registerModal">
+        <div class="modal-content">
+            <span class="close" id="closeRegister">&times;</span>
+            <h2>Регистрация</h2>
+            <form id="registerForm">
+                <input type="text" id="registerName" placeholder="Имя" required>
+                <input type="email" id="registerEmail" placeholder="Email" required>
+                <input type="password" id="registerPassword" placeholder="Пароль" required>
+                <button type="submit">Зарегистрироваться</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const profile = document.getElementById('profile');
+        const profileLink = document.getElementById('profileLink');
+        const uploadedCount = document.getElementById('uploadedCount');
+        const userStatus = document.getElementById('userStatus');
+        const adminCode = document.getElementById('adminCode');
+        const adminButton = document.getElementById('adminButton');
+
+        let isRegistered = false;
+        let isLoggedIn =
+        false;
+
+        const loginBtn = document.getElementById('loginBtn');
+        const registerBtn = document.getElementById('registerBtn');
+        const loginModal = document.getElementById('loginModal');
+        const registerModal = document.getElementById('registerModal');
+        const closeLogin = document.getElementById('closeLogin');
+        const closeRegister = document.getElementById('closeRegister');
+        const loginForm = document.getElementById('loginForm');
+        const registerForm = document.getElementById('registerForm');
+
+        // Check localStorage for user session
+        if (localStorage.getItem('isLoggedIn') === 'true') {
+            isLoggedIn = true;
+            profileLink.style.display = 'inline-block';
+            loginBtn.style.display = 'none';
+            registerBtn.style.display = 'none';
+        }
+
+        // Open Modals
+        loginBtn.addEventListener('click', () => {
+            loginModal.style.display = 'flex';
+        });
+
+        registerBtn.addEventListener('click', () => {
+            registerModal.style.display = 'flex';
+        });
+
+        // Close Modals
+        closeLogin.addEventListener('click', () => {
+            loginModal.style.display = 'none';
+        });
+
+        closeRegister.addEventListener('click', () => {
+            registerModal.style.display = 'none';
+        });
+
+        // Register Functionality
+        registerForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const name = document.getElementById('registerName').value;
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+
+            // Simulate successful registration
+            alert('Регистрация успешна!');
+            isRegistered = true;
+            isLoggedIn = true;
+            localStorage.setItem('isLoggedIn', 'true');
+            profileLink.style.display = 'inline-block';
+            loginBtn.style.display = 'none';
+            registerBtn.style.display = 'none';
+            loginModal.style.display = 'none';
+            registerModal.style.display = 'none';
+        });
+
+        // Login Functionality
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            if (!isRegistered) {
+                alert('Пожалуйста, зарегистрируйтесь перед входом.');
+                loginModal.style.display = 'none';
+                return;
+            }
+            alert('Вход выполнен!');
+            isLoggedIn = true;
+            localStorage.setItem('isLoggedIn', 'true');
+            profileLink.style.display = 'inline-block';
+            loginBtn.style.display = 'none';
+            registerBtn.style.display = 'none';
+            loginModal.style.display = 'none';
+        });
+
+        // Profile Link
+        profileLink.addEventListener('click', () => {
+            profile.style.display = profile.style.display === 'block' ? 'none' : 'block';
+        });
+
+        // Admin Code Verification
+        adminButton.addEventListener('click', () => {
+            const code = adminCode.value.trim();
+            if (code === 'New') {
+                userStatus.textContent = 'Администратор';
+                alert('Вы стали администратором!');
+            } else {
+                alert('Неверный код!');
+            }
+        });
+
+        // Hide Profile on Outside Click
+        window.addEventListener('click', (e) => {
+            if (!profile.contains(e.target) && e.target !== profileLink) {
+                profile.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
+<section id="gallery" class="gallery">
+    <div class="container">
+        <h2>Наши картины</h2>
+        <div class="art-grid">
+            <!-- Карточка картины -->
+            <div class="art-item" style="text-align: center; margin: 1rem; padding: 1rem; border: 1px solid #ccc; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); max-width: 300px;">
+                <img src="C:/Users/pypk1/OneDrive/Рабочий стол/НАЗВАНИЕ Натюрморт продажа картин/png/photo_2025-01-15_13-33-44.jpg" 
+                     alt="Влюблённые крысы" 
+                     style="width: 100%; height: auto; border-radius: 8px;">
+                <h3>Влюблённые крысы</h3>
+                <p style="font-size: 1rem; font-weight: bold; color: #4CAF50;">Цена: 60₽</p>
+                <button onclick="openPaymentModal()" style="padding: 0.5rem 1rem; background-color: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer;">Купить</button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Модальное окно способов оплаты -->
+<div class="modal" id="paymentModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); justify-content: center; align-items: center;">
+    <div class="modal-content" style="background: white; padding: 2rem; border-radius: 8px; text-align: center; width: 90%; max-width: 400px;">
+        <span onclick="closePaymentModal()" style="position: absolute; top: 10px; right: 10px; cursor: pointer; font-size: 1.2rem;">&times;</span>
+        <h2>Выберите способ оплаты</h2>
+        <div style="margin: 1rem 0;">
+            <button style="padding: 0.5rem 1rem; margin: 0.5rem; background-color: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer;">Оплатить картой</button>
+            <button style="padding: 0.5rem 1rem; margin: 0.5rem; background-color: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer;">Оплатить через PayPal</button>
+            <button style="padding: 0.5rem 1rem; margin: 0.5rem; background-color: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer;">Оплатить через СБП</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Открыть модальное окно оплаты
+    function openPaymentModal() {
+        document.getElementById('paymentModal').style.display = 'flex';
+    }
+
+    // Закрыть модальное окно оплаты
+    function closePaymentModal() {
+        document.getElementById('paymentModal').style.display = 'none';
+    }
+
+    // Закрытие модального окна при клике вне его
+    window.addEventListener('click', function(event) {
+        const modal = document.getElementById('paymentModal');
+        if (event.target === modal) {
+            modal.style.display = 'none';
+        }
+    });
+</script>
